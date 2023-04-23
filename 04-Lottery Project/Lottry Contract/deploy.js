@@ -1,3 +1,4 @@
+const util = require("util");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("web3");
 
@@ -19,6 +20,7 @@ const deploy = async () => {
     .deploy({ data: evm.bytecode.object })
     .send({ gas: "1000000", from: accounts[0] });
 
+  console.log(util.inspect(abi, false, null, true));
   console.log("Contract deployed to", result.options.address);
   provider.engine.stop();
 };

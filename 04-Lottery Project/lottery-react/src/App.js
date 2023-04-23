@@ -11,6 +11,7 @@ const App = () => {
 
   useEffect(() => {
     async function fetchData() {
+      //if we don't specify from property inside call, first account from our metamask will be used
       const manager = await lottery.methods.manager().call();
       const players = await lottery.methods.getPlayers().call();
       const balance = await web3.eth.getBalance(lottery.options.address);
@@ -21,7 +22,7 @@ const App = () => {
     }
 
     fetchData();
-  }, []);
+  }, [message]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,11 +31,14 @@ const App = () => {
 
     setMessage("Waiting on transaction success...");
 
+    //When you send transactions, you have to specify which account you want to send the ether form
+    //here we are assuming that the first account sends the transaction
     await lottery.methods.enter().send({
       from: accounts[0],
       value: web3.utils.toWei(value, "ether"),
     });
 
+    setValue("");
     setMessage("You have been entered!");
   }
 
